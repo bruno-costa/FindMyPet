@@ -1,0 +1,92 @@
+/* Bruno Avelino Costa
+ *
+ * Tabelas:
+ * >o nome da tabela tem q ser BigCamelCase e no singular
+ * >nome dos atributos padrao_com_underlines e no singular, exeto :
+ * >>PRIMARY KEY= nome: ID (sempre AUTO_INCREMENT)
+ * >>FOREIGN KEY= nome: $(NOMEDATABELA)_ID
+ */
+
+DROP DATABASE FindMyPet;
+CREATE DATABASE FindMyPet DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+
+USE FindMyPet;
+
+CREATE TABLE Classe(
+	ID INT AUTO_INCREMENT,
+	nome VARCHAR(15) NOT NULL,
+
+	PRIMARY KEY (ID)
+);
+
+CREATE TABLE Especie(
+	ID INT AUTO_INCREMENT,
+	classe_ID INT NOT NULL,
+	nome VARCHAR(30) NOT NULL,
+
+	PRIMARY KEY (ID),
+	FOREIGN KEY (classe_ID) REFERENCES Classe(ID) ON DELETE CASCADE
+);
+
+CREATE TABLE Raca(
+	ID INT AUTO_INCREMENT,
+	especie_ID INT NOT NULL,
+	nome VARCHAR(30) NOT NULL,
+
+	PRIMARY KEY (ID),
+	FOREIGN KEY (especie_ID) REFERENCES Especie(ID) ON DELETE CASCADE
+);
+
+CREATE TABLE RedeSocial(
+	ID INT AUTO_INCREMENT,
+	nome VARCHAR(20) NOT NULL,
+
+	PRIMARY KEY (ID)
+);
+
+CREATE TABLE Animal(
+	ID INT AUTO_INCREMENT,
+	raca_ID INT NOT NULL,
+	especie_ID INT NOT NULL,
+	redeSocial_ID INT NOT NULL,
+	link VARCHAR(250) NOT NULL,
+	sexo CHAR(1) NOT NULL,
+	descricao VARCHAR(500),
+
+	PRIMARY KEY (ID),
+	FOREIGN KEY (raca_ID) REFERENCES Raca(ID) ON DELETE CASCADE,
+	FOREIGN KEY (especie_ID) REFERENCES Especie(ID) ON DELETE CASCADE,
+	FOREIGN KEY (redeSocial_ID) REFERENCES RedeSocial(ID) ON DELETE CASCADE
+);
+
+CREATE TABLE Achado(
+	ID INT AUTO_INCREMENT,
+	animal_ID INT NOT NULL,
+	data date NOT NULL,
+
+	PRIMARY KEY (ID),
+	FOREIGN KEY (animal_ID) REFERENCES Animal(ID) ON DELETE CASCADE
+);
+
+CREATE TABLE Perdido(
+	ID INT AUTO_INCREMENT,
+	animal_ID INT NOT NULL,
+	data date NOT NULL,
+
+	PRIMARY KEY (ID),
+	FOREIGN KEY (animal_ID) REFERENCES Animal(ID) ON DELETE CASCADE
+);
+
+CREATE TABLE Concluido(
+	ID INT AUTO_INCREMENT,
+	animal_ID INT NOT NULL,
+	contato VARCHAR(50) NOT NULL,
+	como_cadastrado varchar(1) NOT NULL,
+	data_entrada date NOT NULL,
+	data_saida date NOT NULL,
+
+	PRIMARY KEY (ID),
+	FOREIGN KEY (animal_ID) REFERENCES Animal(ID) ON DELETE CASCADE
+);
+
+
